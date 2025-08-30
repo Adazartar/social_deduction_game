@@ -3,7 +3,6 @@ import './App.css';
 
 // DEPLOY WITH npm run deploy
 
-
 function App() {
   // States for the game's core data and UI
   const [users, setUsers] = useState([]);
@@ -12,7 +11,8 @@ function App() {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
-  const [assignedWords, setAssignedWords] = useState({}); // New state to hold assigned words
+  const [assignedWords, setAssignedWords] = useState({});
+  const [clickedUsers, setClickedUsers] = useState(new Set()); // New state to track clicked users
 
   // Sample words for each category
   const wordLists = {
@@ -63,6 +63,7 @@ function App() {
 
     setAssignedWords(newAssignedWords);
     setIsGameStarted(true);
+    setClickedUsers(new Set()); // Reset clicked users for the new game
   };
 
   const handleEndGame = () => {
@@ -70,22 +71,28 @@ function App() {
     let spyName = '';
 
     for (const [user, word] of Object.entries(assignedWords)) {
-        if (word === '???') {
-            spyName = user;
-        } else {
-            secretWord = word;
-        }
+      if (word === '???') {
+        spyName = user;
+      } else {
+        secretWord = word;
+      }
     }
 
     alert(`The game has ended! The secret word was "${secretWord}", and the spy was ${spyName}.`);
     
     setIsGameStarted(false);
     setAssignedWords({});
+    setClickedUsers(new Set()); // Reset clicked users for the end of the game
   };
 
   const handleUserClick = (user) => {
+    if (clickedUsers.has(user)) {
+      return; // Do nothing if the user has already been clicked
+    }
+
     setSelectedUser(user);
     setIsPopupVisible(true);
+    setClickedUsers(prev => new Set(prev).add(user)); // Add the user to the clicked set
   };
 
   return (
@@ -95,7 +102,7 @@ function App() {
         {users.map((user, index) => (
           <div 
             key={user} 
-            className={`user-container ${isGameStarted ? 'in-game' : ''}`}
+            className={`user-container ${isGameStarted ? 'in-game' : ''} ${clickedUsers.has(user) ? 'clicked' : ''}`}
             onClick={isGameStarted ? () => handleUserClick(user) : null}
           >
             <h2>{user}</h2>

@@ -71,3 +71,8 @@
 .in-game {
   background-color: #1a1a1a;
 }
+
+.user-container.clicked {
+  opacity: 0.5; /* Make it semi-transparent */
+  pointer-events: none; /* Make it unclickable */
+}
