@@ -2,7 +2,7 @@
   "name": "social_deducation_game",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://Adazartar.github.io/social_deduction_game",
+  "homepage": "https://adazartar.github.io/social_deduction_game",
   "type": "module",
   "scripts": {
     "dev": "vite",
